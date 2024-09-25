@@ -1,4 +1,4 @@
-package com.notnex.notes
+package com.notnex.notes.database
 
 import androidx.room.Dao
 import androidx.room.Delete

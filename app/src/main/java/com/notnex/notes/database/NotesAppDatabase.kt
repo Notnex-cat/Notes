@@ -1,4 +1,4 @@
-package com.notnex.notes
+package com.notnex.notes.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

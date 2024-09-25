@@ -1,4 +1,4 @@
-package com.notnex.notes
+package com.notnex.notes.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
