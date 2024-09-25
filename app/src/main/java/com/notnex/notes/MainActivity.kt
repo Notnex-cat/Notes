@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -36,6 +38,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -81,17 +86,35 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            NotesApp(noteDao)
+            NotesTheme {
+                NotesApp(noteDao)
+            }
         }
     }
 
+    @Composable
+    fun NotesTheme(
+        darkTheme: Boolean = isSystemInDarkTheme(), // Определяет, использовать ли тёмную тему
+        content: @Composable () -> Unit
+    ) {
+        val colors = if (darkTheme) {
+            darkColorScheme() // Используйте встроенную тёмную палитру
+        } else {
+            lightColorScheme() // Используйте встроенную светлую палитру
+        }
+
+        MaterialTheme(
+            colorScheme = colors,
+            //typography = Typography,
+            content = content
+        )
+    }
 
     @Composable
     fun NotesApp(noteDao: NoteDao) {
-        //val scope = rememberCoroutineScope()
-        var notes by remember { mutableStateOf(emptyList<Note>()) }
+        //var notes by remember { mutableStateOf(emptyList<Note>()) }
         val navController = rememberNavController()
-        //var notes by remember { mutableStateOf(listOf<Note>()) }
+        var notes by remember { mutableStateOf(listOf<Note>()) }
         var currentNote by remember { mutableStateOf<Note?>(null) }
 
         // Load notes from the database
@@ -121,7 +144,7 @@ class MainActivity : ComponentActivity() {
                             withContext(Dispatchers.IO) {
                                 if (currentNote == null) {
                                     // Создаем новую заметку без явного указания id
-                                    val newNote = Note(title = title, text = text)
+                                    val newNote = Note(title = title, text = text, timestamp = System.currentTimeMillis())
                                     noteDao.insert(newNote) // Вставка в базу данных
                                 } else {
                                     // Обновляем существующую заметку
@@ -173,7 +196,7 @@ class MainActivity : ComponentActivity() {
                 .padding(8.dp)
                 .fillMaxWidth()
                 .clickable(onClick = onClick),
-            //elevation = 4.dp
+            elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -197,7 +220,7 @@ class MainActivity : ComponentActivity() {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(if (note == null) "New Note" else "Edit Note") },
+                    title = { Text(if (note == null) stringResource(id = R.string.new_note) else stringResource(id = R.string.edit_note)) },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -237,8 +260,8 @@ class MainActivity : ComponentActivity() {
                     Spacer(Modifier.weight(1f))
                     Text(
                         modifier = Modifier.align(Alignment.CenterVertically),
-                        text = "Изменено только что",
-                        style = MaterialTheme.typography.bodyMedium // Обновляем стиль на актуальный
+                        text = getTimeAgo(note?.timestamp), // Отображаем время создания
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(Modifier.weight(1f))
                     IconButton(onClick = { /* TODO: действие для меню */ }) {
@@ -257,7 +280,7 @@ class MainActivity : ComponentActivity() {
                 TextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Название") },
+                    label = { Text(stringResource(id = R.string.note_name)) },
                     modifier = Modifier
                         .fillMaxWidth(),
                     textStyle = TextStyle(
@@ -276,7 +299,7 @@ class MainActivity : ComponentActivity() {
                 TextField(
                     value = text,
                     onValueChange = { text = it },
-                    label = { Text("Текст") },
+                    label = { Text(stringResource(id = R.string.note_text)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp),
@@ -293,6 +316,25 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             }
+        }
+    }
+
+    fun getTimeAgo(timestamp: Long?): String {
+        if (timestamp == null) return ""
+
+        val now = System.currentTimeMillis()
+        val difference = now - timestamp
+
+        val seconds = difference / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+
+        return when {
+            seconds < 60 -> "Только что"
+            minutes < 60 -> "$minutes мин. назад"
+            hours < 24 -> "$hours ч. назад"
+            else -> "$days дн. назад"
         }
     }
 
