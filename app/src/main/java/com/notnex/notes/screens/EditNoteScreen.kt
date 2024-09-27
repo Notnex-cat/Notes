@@ -74,7 +74,7 @@ fun EditNoteScreen(
                 containerColor = MaterialTheme.colorScheme.background,
                 contentColor = MaterialTheme.colorScheme.onBackground
             ) {
-                IconButton(onClick = { /* TODO: действие для добавления */ }) {
+                IconButton(onClick = {  }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
                 }
                 IconButton(onClick = { /* TODO: действие для изменения темы */ }) {
