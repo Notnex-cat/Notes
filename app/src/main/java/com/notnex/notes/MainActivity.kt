@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +42,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import com.notnex.notes.database.Note
 import com.notnex.notes.database.NoteDao
 import com.notnex.notes.database.NotesAppDatabase
@@ -77,11 +77,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-
     @Suppress("SpellCheckingInspection")
     @Composable
     fun NotesApp(noteDao: NoteDao) {
+
+        //подключение к файрсторе
+        val fs = Firebase.firestore
+
         val navController = rememberNavController()
         var notes by remember { mutableStateOf(listOf<Note>()) }
         var currentNote by remember { mutableStateOf<Note?>(null) }
@@ -94,30 +96,6 @@ class MainActivity : ComponentActivity() {
         NavHost(
             navController,
             startDestination = "notes_list", //стартовая страница
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(400)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(400)
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(400)
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(400)
-                )
-            }
         ) {
             composable("notes_list") {
                 NoteListScreen(
@@ -145,11 +123,23 @@ class MainActivity : ComponentActivity() {
                                     // Создаем новую заметку без явного указания id
                                     val newNote = Note(title = title, text = text, timestamp = System.currentTimeMillis())
                                     noteDao.insert(newNote) // Вставка в базу данных
+                                    fs.collection("notes")
+                                        .document().set(
+                                            Note(
+                                                title = title,
+                                                text = text
+                                            )
+                                        )
                                 } else {
                                     // Обновляем существующую заметку
                                     val updatedNote = currentNote!!.copy(title = title, text = text)
                                     noteDao.update(updatedNote)
+                                    /*fs.collection("notes").document().update(Note(
+                                        title = title,
+                                        text = text
+                                    ))*/
                                 }
+                                //в базу отправляем заметку
 
                                 // Получаем все заметки
                                 notes = noteDao.getAllNotes()

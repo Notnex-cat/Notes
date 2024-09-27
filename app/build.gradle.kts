@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -74,4 +75,13 @@ dependencies {
     implementation(libs.room.ktx)
 
     implementation (libs.androidx.activity)
+
+
+    // Import the Firebase BoM
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+
+    implementation(libs.coil.compose)
 }
