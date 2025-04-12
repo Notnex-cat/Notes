@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_note">Новая заметка</string>
+    <string name="app_name">Заметки</string>
+    <string name="edit_note">Редактировать заметку</string>
+    <string name="note_name">Название</string>
+    <string name="note_text">Текст заметки</string>
+    <string name="settings">Настройки</string>
+    <string name="note_image">Изображение</string>
+    <string name="delete_account">Удалить аккаунт</string>
+    <string name="sign_in">Войти в аккаунт</string>
+    <string name="sign_out">Выйти из аккаунта</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="about_app">О приложении</string>
+    <string name="sign_up_error">Ошибка регистрации</string>
+    <string name="email_or_password_is_empty">"Не хватает логина или пароля "</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+</resources>

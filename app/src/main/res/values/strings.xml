@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="new_note">New Note</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="note_name">Note Name</string>
+    <string name="note_text">Note Text</string>
+    <string name="note_image">Image</string>
+    <string name="settings">Settings</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_up_error">Sign Up Error</string>
+    <string name="email_or_password_is_empty">Email or password is empty</string>
+    <string name="about_app">About App</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+</resources>
