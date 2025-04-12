@@ -28,8 +28,8 @@
 
 ## 📸 Скриншоты
 > <img src="screenshotes/photo_1.jpg" width="300" alt="Логотип проекта"/>
-<img src="screenshotes/photo_2.jpg" width="300" alt="Логотип проекта"/>
-<img src="screenshotes/photo_3.jpg" width="300" alt="Логотип проекта"/>
+> <img src="screenshotes/photo_2.jpg" width="300" alt="Логотип проекта"/>
+> <img src="screenshotes/photo_3.jpg" width="300" alt="Логотип проекта"/>
 
 
 
