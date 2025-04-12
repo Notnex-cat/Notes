@@ -29,7 +29,9 @@
 ## 📸 Скриншоты
 
 > 📌 *Добавь сюда 2–3 скриншота приложения в действии, в формате PNG или JPG*
-> ![Описание изображения](screenshotes/photo_1.jpg)
+> <img src="screenshotes/photo_1.jpg" width="300" alt="Логотип проекта"/>
+<img src="screenshotes/photo_2.jpg" width="300" alt="Логотип проекта"/>
+<img src="screenshotes/photo_3.jpg" width="300" alt="Логотип проекта"/>
 
 
 
